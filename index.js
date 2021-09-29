@@ -45,19 +45,35 @@ function init() {
             type: 'input',
             name: 'fileName',
             message: questions[5],
-        }
+        },{
+            type: 'checkbox',
+            name: 'licensing',
+            message: 'Choose a license for your project (Required)',
+            choices: ['Apache', 'MIT', 'Mozilla-Public', 'GNU-General-Public', 'Common-Development-and Distribution', 'None'],
+            validate: licensingInput => {
+                if (licensingInput) {
+                    return true;
+                } else {
+                    console.log('You must pick a license for the project!');
+                    return false;
+                }
+            }
+        },
+        
         ]).then((data) => {
             const template = `
-                # ${data.name}\n
-                ## Project Goal\n
-                ${data.goal}\n
-                ## Lessons Learned\n
-                ${data.lessons}\n
-                ## Project Challenges\n
-                ${data.challenges}\n
-                ## Installation\n
+                # ${data.name}
+                ## Licensing:
+                [![license](https://img.shields.io/badge/license-${data.licensing}-blue)](https://shields.io)
+                ## Project Goal
+                ${data.goal}
+                ## Lessons Learned
+                ${data.lessons}
+                ## Project Challenges
+                ${data.challenges}
+                ## Installation
                 ${data.install}
-                ---\n`
+                ---`
             writeToFile(`${data.fileName}.md`,template);
         });
     
